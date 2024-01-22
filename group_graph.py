@@ -1,14 +1,14 @@
 import networkx as nx
 #   taken from a good answer by Gambit1614 on StackOverflow https://stackoverflow.com/questions/57095809/networkx-connecting-nodes-using-ports
 
-class PortGraph(nx.Graph):
+class GroupGraph(nx.Graph):
     """A graph with ports as parts of nodes that can be connected to other ports."""
     def __init__(self, node_types=None):
-        super(PortGraph, self).__init__()
+        super(GroupGraph, self).__init__()
         self.node_types = node_types
 
     def add_node(self, nodeID, node_type):
-        super(PortGraph, self).add_node(nodeID)
+        super(GroupGraph, self).add_node(nodeID)
         self.nodes[nodeID]['type'] = node_type
         self.nodes[nodeID]['ports'] = self.node_types[self.nodes[nodeID]['type']]
     
@@ -29,7 +29,7 @@ class PortGraph(nx.Graph):
         if self.has_edge(node1, node2):
             self.edges[node1, node2]['anchors'].append(edge_ports)
         else:
-            super(PortGraph, self).add_edge(node1, node2, anchors=[edge_ports])
+            super(GroupGraph, self).add_edge(node1, node2, anchors=[edge_ports])
 
     def make_undirected(self):
         for edge in self.edges:
@@ -52,7 +52,7 @@ class PortGraph(nx.Graph):
         return f"Nodes (type, ports): {self.nodes.data('type')}, {self.nodes.data('ports')}\nEdges (ports): {self.edges.data('anchors')}"
 
 if __name__ == '__main__':
-    pG = PortGraph(node_types={
+    pG = GroupGraph(node_types={
         'C4':['s1', 's2', 's3', 's4'], 
         'H1':['s1'], 
         'N3':['s1', 's2', 's3'],
